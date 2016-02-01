@@ -70,7 +70,7 @@ class aurora::scheduler (
   exec { 'init-mesos-log':
     command => '/usr/bin/mesos-log initialize --path=/var/lib/aurora/scheduler/db && /bin/chown aurora:aurora /var/lib/aurora/scheduler/db/*',
     unless  => '/usr/bin/test -f /var/lib/aurora/scheduler/db/CURRENT',
-    require => Package['aurora-scheduler'],
+    require => [Package['aurora-scheduler'], File['/var/lib/aurora/scheduler/db']],
     notify  => Service['aurora-scheduler'],
   }
 }
