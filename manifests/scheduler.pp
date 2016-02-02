@@ -13,6 +13,8 @@
 class aurora::scheduler (
   $template_options = $aurora::scheduler_options,
 ){
+  $aurora_home = $template_options['aurora_home']
+
   $aurora_ensure = $aurora::version? {
     undef    => 'absent',
     default => $aurora::version,
@@ -28,7 +30,7 @@ class aurora::scheduler (
     require => Class['aurora::repo'],
   }
 
-  file { '/var/lib/aurora/scheduler':
+  file { "${aurora_home}/scheduler":
     ensure  => directory,
     owner   => $aurora::owner,
     group   => $aurora::group,
@@ -36,14 +38,14 @@ class aurora::scheduler (
     require => Package['aurora-scheduler'],
   }
 
-  file { '/var/lib/aurora/scheduler/db':
+  file { "${aurora_home}/scheduler/db":
     ensure  => directory,
     owner   => $aurora::owner,
     group   => $aurora::group,
     mode    => '0644',
     require => [
       Package['aurora-scheduler'],
-      File['/var/lib/aurora/scheduler'],
+      File["${aurora_home}/scheduler"],
     ]
   }
 
@@ -68,9 +70,9 @@ class aurora::scheduler (
   }
 
   exec { 'init-mesos-log':
-    command => '/usr/bin/mesos-log initialize --path=/var/lib/aurora/scheduler/db && /bin/chown aurora:aurora /var/lib/aurora/scheduler/db/*',
-    unless  => '/usr/bin/test -f /var/lib/aurora/scheduler/db/CURRENT',
-    require => [Package['aurora-scheduler'], File['/var/lib/aurora/scheduler/db']],
+    command => "/usr/bin/mesos-log initialize --path=${aurora_home}/scheduler/db && /bin/chown aurora:aurora ${aurora_home}/scheduler/db/*",
+    unless  => "/usr/bin/test -f ${aurora_home}/scheduler/db/CURRENT",
+    require => [Package['aurora-scheduler'], File["${aurora_home}/scheduler/db"]],
     notify  => Service['aurora-scheduler'],
   }
 }
