@@ -21,7 +21,6 @@ class aurora (
   $repo_key = undef,
   $observer_port = 1338,
   $scheduler_options = {
-    'log_level'                  => 'INFO',
     'libmesos_log_verbosity'     => 0,
     'libprocess_port'            => '8083',
     'libprocess_ip'              => '127.0.0.1',
@@ -48,9 +47,6 @@ class aurora (
   }
 ) {
   if $scheduler_options {
-    if $scheduler_options['log_level'] {
-      validate_string($scheduler_options['log_level'])
-    }
     if $scheduler_options['libmesos_log_verbosity'] {
       validate_string($scheduler_options['libmesos_log_verbosity'])
     }

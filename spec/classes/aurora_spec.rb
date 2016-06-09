@@ -13,7 +13,6 @@ describe 'aurora' do
           enable: true,
           configure_repo: false,
           scheduler_options: {
-            'log_level' => 'INFO',
             'libmesos_log_verbosity' => 0,
             'libprocess_port' => '8083',
             'java_opts' => ['-server', "-Djava.library.path='/usr/lib;/usr/lib64'" ],
@@ -40,7 +39,7 @@ describe 'aurora' do
       end
 
       context 'scheduler options' do
-        $expected_string_params = %w(log_level libmesos_log_verbosity libprocess_port cluster_name zookeeper zookeeper_mesos_path zookeeper_aurora_path)
+        $expected_string_params = %w(libmesos_log_verbosity libprocess_port cluster_name zookeeper zookeeper_mesos_path zookeeper_aurora_path)
         $expected_string_params.each do |scheduler_param|
           context "with an invalid #{scheduler_param}  parameter" do
             let (:params) do

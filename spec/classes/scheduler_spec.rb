@@ -12,7 +12,6 @@ describe 'aurora', type: :class do
           master: true,
           scheduler_options: {
             'observer_port' => '1338',
-            'log_level' => 'INFO',
             'libmesos_log_verbosity' => 0,
             'libprocess_port' => '8083',
             'java_opts' => [
